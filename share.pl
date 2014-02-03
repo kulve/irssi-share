@@ -64,8 +64,6 @@ sub handle_meta {
     print "Invalid meta, neither link or image defined";
     return;
   }
-
-  unlink("$dir_in/$file");
 }
 
 
@@ -179,6 +177,7 @@ sub timeouttest {
         # Try to ensure that the whole meta file there
         if ($diff > 10) {
           handle_meta($dir_in, $dir_public, $file);
+          unlink($filename);
         }
       } else {
         if ($diff > 24*60*60) {
