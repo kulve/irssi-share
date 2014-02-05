@@ -84,12 +84,34 @@ sub handle_photo {
   my $name_public = "$base$unguessable$extension";
   my $name_public_orig = "$base${unguessable}_orig$extension";
 
-  # Resize the image
+  my $rotate = 0;
+  # Get image rotation from exif
+  if ( -e "/usr/bin/exiftool") {
+    my $cmd = "exiftool -s -s -s -Orientation -n $filename";
+    if (open(EXIF, "$cmd |")) {
+      my $exifout = <EXIF>;
+      close(EXIF);
+      chomp $exifout;
+
+      if ("$exifout" eq "6") {
+        $rotate = 90;
+      }
+    }
+  }
+
+  # Resize and optionally rotate the image
   if (-e "/usr/bin/convert") {
-    my $cmd = "convert -unsharp 0x2+1+0 -resize 1024 $dir_in/$file $dir_public/$name_public";
-    print "convert cmd: $cmd";
+    my $cmd = "convert -rotate $rotate -unsharp 0x2+1+0 -resize 1024 $dir_in/$file $dir_public/$name_public";
     if (open(CONVERT, "$cmd |")) {
       close(CONVERT);
+    }
+
+    # Remove rotation from exif
+    if ($rotate) {
+      $cmd = "exiftool -Orientation=1 -n $dir_public/$name_public";
+      if (open(EXIF, "$cmd |")) {
+        close(EXIF);
+      }
     }
   } else {
     # Without convert there is only one file.
