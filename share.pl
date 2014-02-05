@@ -40,7 +40,7 @@ sub handle_meta {
       if ($meta =~ /comment=(.*)/);
 
   my $channels = $1
-      if ($meta =~ /channels=(.*)/);
+      if ($meta =~ /channel=(.*)/);
 
   my $link = $1
       if ($meta =~ /link=(.*)/);
