@@ -101,7 +101,7 @@ sub handle_photo {
 
   # Resize and optionally rotate the image
   if (-e "/usr/bin/convert") {
-    my $cmd = "convert -rotate $rotate -unsharp 0x2+1+0 -resize 1024 $dir_in/$file $dir_public/$name_public";
+    my $cmd = "convert -resize 1024 -rotate $rotate -unsharp 0x2+1+0 $dir_in/$file $dir_public/$name_public";
     if (open(CONVERT, "$cmd |")) {
       close(CONVERT);
     }
