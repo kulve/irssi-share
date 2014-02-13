@@ -108,7 +108,7 @@ sub handle_photo {
 
     # Remove rotation from exif
     if ($rotate) {
-      $cmd = "exiftool -Orientation=1 -n $dir_public/$name_public";
+      $cmd = "exiftool -q -q -Orientation=1 -n $dir_public/$name_public";
       if (open(EXIF, "$cmd |")) {
         close(EXIF);
       }
